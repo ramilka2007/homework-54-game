@@ -14,19 +14,44 @@ const Desk = () => {
         return start;
     }
 
-    const [items] = useState(createItems);
+    const [items, setItems] = useState(createItems);
+
+    const reset = () => {
+        createItems();
+        setItems(createItems);
+    }
+
+    const clickedItems = (id: string) => {
+        setItems((prevState) => {
+            return prevState.map((item) => {
+                if (item.id === id) {
+                    return {...item, clicked: true};
+                }
+
+                return item;
+            });
+        });
+    };
+
     return (
-        <div style={{
-            display: "flex",
-            padding: "10px",
-            gap: "3px",
-            border: "1px solid black",
-            width: "318px",
-            flexWrap: "wrap"
-        }}>
-            {items.map((item) => (
-                <OneBlock key={item.id} hasItem={item.hasItem} clicked={item.clicked}/>
-            ))}</div>
+        <>
+            <div style={{
+                display: "flex",
+                padding: "10px",
+                gap: "3px",
+                border: "1px solid black",
+                width: "318px",
+                flexWrap: "wrap"
+            }}>
+                {items.map((item) => (
+                    <OneBlock key={item.id} hasItem={item.hasItem} clicked={item.clicked}
+                              divClick={() => clickedItems(item.id)}/>
+                ))}</div>
+            <div>
+                <strong>Попытка: </strong>
+            </div>
+            <button onClick={reset}>Сброс</button>
+        </>
     );
 };
 
